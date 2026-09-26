@@ -83,13 +83,21 @@ Tests TCP service reachability and provides:
 
 ### Route Diagnostics
 
-Inspects the network path to a destination using platform-specific route tracing commands and records:
+Inspects the network path to a destination using platform-aware route tracing.
 
+The implementation supports:
+
+* `traceroute` where available
+* `tracepath` as a Linux fallback
+* `tracert` on Windows
 * Hop numbers
 * Responding addresses
 * Timeout hops
 * Route completion status
 * Diagnostic duration
+* Configurable maximum hop limits
+
+This allows route diagnostics to remain functional across different operating-system environments without requiring one specific command to be installed everywhere.
 
 ### Network Traffic Monitoring
 
@@ -117,6 +125,7 @@ The reporting service combines multiple diagnostic sources into a structured JSO
 * Traffic counters
 * Traffic-rate measurements
 * Report metadata
+* Privacy information
 
 Reports use timestamped filenames for easier identification and archival.
 
@@ -150,7 +159,7 @@ Diagnostic reports include a privacy notice indicating that network addresses ha
 
 ## Project Demonstration
 
-The project includes visual evidence captured during development and testing.
+The project includes visual evidence captured during development, automated testing, and real-world Linux network diagnostics.
 
 ### Complete Network Diagnostic Report
 
@@ -202,7 +211,19 @@ The project includes visual evidence captured during development and testing.
 
 ![Network Traffic Watch](docs/images/network-traffic-watch.png)
 
+### Additional Linux Validation Evidence
+
+![DNS Diagnostic](docs/images/connectivity-dns.png)
+
+![Network Interfaces](docs/images/interfaces.png)
+
+![TCP Port and Route Diagnostics](docs/images/port-route.png)
+
+![Generated Diagnostic Report](docs/images/report-generated.png)
+
 ### Automated Testing
+
+![Tests Passed](docs/images/tests-passed.png)
 
 **CLI tests:**
 
@@ -236,7 +257,7 @@ The application provides a command-oriented interface for common network trouble
 
 ### Display Network Interfaces
 
-```cmd
+```bash
 python -m network_diagnostics.main interfaces
 ```
 
@@ -244,7 +265,7 @@ Displays detected interfaces, operational status, link speed, MTU, addresses, an
 
 ### Test Connectivity
 
-```cmd
+```bash
 python -m network_diagnostics.main ping example.com
 ```
 
@@ -252,7 +273,7 @@ Tests reachability and reports packet loss and latency measurements.
 
 ### Resolve DNS
 
-```cmd
+```bash
 python -m network_diagnostics.main dns example.com
 ```
 
@@ -260,7 +281,7 @@ Performs hostname resolution and reports IPv4/IPv6 results and lookup timing.
 
 ### Test a TCP Port
 
-```cmd
+```bash
 python -m network_diagnostics.main port example.com 443
 ```
 
@@ -268,15 +289,21 @@ Tests TCP connectivity to the specified service port.
 
 ### Trace a Network Route
 
-```cmd
+```bash
 python -m network_diagnostics.main route example.com
 ```
 
 Inspects the network path toward the destination.
 
+A maximum hop count can also be specified:
+
+```bash
+python -m network_diagnostics.main route example.com --max-hops 5
+```
+
 ### Display Network Summary
 
-```cmd
+```bash
 python -m network_diagnostics.main summary
 ```
 
@@ -284,7 +311,7 @@ Displays a high-level summary of the local network environment.
 
 ### Monitor Network Traffic
 
-```cmd
+```bash
 python -m network_diagnostics.main traffic
 ```
 
@@ -292,7 +319,7 @@ Displays current network traffic counters.
 
 For continuous monitoring:
 
-```cmd
+```bash
 python -m network_diagnostics.main traffic --watch --interval 2
 ```
 
@@ -300,7 +327,7 @@ The interval can be adjusted according to the required monitoring frequency.
 
 ### Generate a Diagnostic Report
 
-```cmd
+```bash
 python -m network_diagnostics.main report example.com
 ```
 
@@ -317,7 +344,7 @@ The report command supports configurable options for:
 
 Example:
 
-```cmd
+```bash
 python -m network_diagnostics.main report example.com --port 443 --count 4 --timeout 3 --max-hops 12 --interval 1
 ```
 
@@ -327,11 +354,9 @@ python -m network_diagnostics.main report example.com --port 443 --count 4 --tim
 
 ```text
 network-diagnostics/
-├── config/
 ├── docs/
 │   ├── images/
 │   └── videos/
-├── logs/
 ├── reports/
 ├── src/
 │   └── network_diagnostics/
@@ -344,12 +369,15 @@ network-diagnostics/
 │       │   ├── summary.py
 │       │   └── traffic.py
 │       ├── services/
+│       │   ├── __init__.py
 │       │   └── reports.py
 │       ├── utils/
+│       │   └── __init__.py
 │       ├── config.py
 │       ├── main.py
 │       └── __init__.py
 ├── tests/
+│   ├── __init__.py
 │   ├── test_connectivity.py
 │   ├── test_dns.py
 │   ├── test_interfaces.py
@@ -365,6 +393,8 @@ network-diagnostics/
 ├── requirements.txt
 └── README.md
 ```
+
+Generated diagnostic reports are intentionally excluded from version control through `.gitignore`.
 
 ---
 
@@ -428,19 +458,17 @@ python -m pip install -e .
 
 Run the complete automated test suite:
 
-```cmd
+```bash
 python -m pytest
 ```
 
-### Windows Verification
-
-The current Windows build has been validated with:
+Current test result:
 
 ```text
-41 passed in 20.95s
+41 passed
 ```
 
-Test coverage includes:
+The test suite covers:
 
 * Connectivity diagnostics
 * DNS resolution
@@ -456,6 +484,55 @@ Test coverage includes:
 * Input validation
 * Error handling
 * Test isolation and mocking
+
+The project has been validated on both Windows and Linux.
+
+---
+
+## Cross-Platform Verification
+
+### Windows
+
+Verified environment:
+
+```text
+Windows 11
+Python 3.14.7
+pytest 9.1.1
+psutil 7.2.2
+41 automated tests passing
+```
+
+The complete diagnostic workflow was executed successfully on Windows.
+
+### Linux
+
+Verified environment:
+
+```text
+Linux
+Python 3.14.4
+41 automated tests passing
+```
+
+The Linux implementation was validated using real network operations including:
+
+* Network interface discovery
+* ICMP connectivity testing
+* DNS resolution
+* TCP port testing
+* Route diagnostics
+* Network traffic monitoring
+* Network environment summary
+* JSON diagnostic report generation
+
+Linux route diagnostics were additionally validated using `tracepath` because `traceroute` was not installed on the test environment.
+
+### macOS
+
+The application architecture uses Python standard-library networking functionality and platform-aware command handling.
+
+macOS support is intended where the required system diagnostic commands are available.
 
 ---
 
@@ -503,7 +580,7 @@ Document
   ↓
 Demonstrate
   ↓
-Verify
+Cross-Platform Verify
   ↓
 Publish
 ```
@@ -512,59 +589,61 @@ This workflow ensures that the project includes both functional implementation a
 
 ---
 
-## Platform Support
-
-### Windows
-
-Primary development and testing platform.
-
-Verified environment:
-
-```text
-Windows 11
-Python 3.14.7
-pytest 9.1.1
-psutil 7.2.2
-41 automated tests passing
-```
-
-### Linux
-
-The application is designed for Linux using platform-aware diagnostic command handling.
-
-Linux verification is the next cross-platform validation step.
-
-### macOS
-
-The application architecture uses Python standard-library networking functionality and platform-aware command handling.
-
-macOS support is intended where the required system diagnostic commands are available.
-
----
-
 ## Project Status
 
-### Windows Development
+### Core Development
 
 **Complete**
 
-The Windows implementation has passed the complete automated test suite:
+The Network Diagnostics & Monitoring Suite has been implemented as a modular Python application with:
+
+* Network interface diagnostics
+* Connectivity testing
+* DNS diagnostics
+* TCP port testing
+* Route tracing
+* Traffic monitoring
+* Diagnostic reporting
+* Privacy-aware output
+* Automated testing
+
+### Automated Testing
+
+**Complete**
 
 ```text
 41 passed
 ```
 
+### Windows Verification
+
+**Complete**
+
+The application and complete test suite have been validated on Windows 11.
+
 ### Linux Verification
 
-**Pending**
+**Complete**
 
-The project will be executed and validated on Linux as the next cross-platform verification stage.
+The application and complete test suite have been validated on Linux, including real network diagnostic operations and JSON report generation.
+
+### Visual Evidence
+
+**Complete**
+
+The repository contains screenshots covering network diagnostics, testing, traffic monitoring, route analysis, DNS resolution, TCP connectivity, and report generation.
+
+### Video Demonstrations
+
+**Complete**
+
+Demonstration videos are included for diagnostic reporting and continuous network traffic monitoring.
 
 ### GitHub Release
 
-**Pending**
+**Finalization stage**
 
-The repository will be published after final documentation review and Linux verification.
+The remaining work is to review the final working-tree changes, commit the updated implementation and visual evidence, and push the completed project to GitHub.
 
 ---
 

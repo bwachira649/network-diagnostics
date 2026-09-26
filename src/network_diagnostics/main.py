@@ -673,6 +673,9 @@ def main() -> None:
         )
 
     elif args.command == "route":
+        if not args.host.strip():
+            parser.error("Route host must not be empty.")
+
         if args.max_hops < 1:
             parser.error("Maximum hops must be at least 1.")
 
