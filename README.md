@@ -2,12 +2,32 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 [![Tests](https://img.shields.io/badge/Tests-41%20passed-success.svg)](#testing)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](#platform-support)
+[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](#cross-platform-verification)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](#license)
 
 A professional cross-platform Python toolkit for network diagnostics, connectivity testing, service reachability analysis, traffic monitoring, and structured diagnostic reporting.
 
 The application provides a unified command-line interface for investigating common network problems without relying on external cloud infrastructure. It combines Python networking APIs, operating-system diagnostic commands, traffic statistics, automated testing, and privacy-aware reporting in a modular application architecture.
+
+---
+
+## Engineering Evidence
+
+This project demonstrates practical engineering work across network troubleshooting, Python automation, Linux and Windows operations, CLI development, testing, and diagnostic reporting.
+
+**Current verified evidence includes:**
+
+* **41 automated tests passing** on Linux with Python 3.14.4
+* Complete test-suite verification on Windows 11 with Python 3.14.7
+* Cross-platform implementation for Windows, Linux, and macOS
+* Network interface, connectivity, DNS, TCP, routing, and traffic diagnostics
+* Structured JSON diagnostic report generation
+* Privacy-aware masking of network information for safer sharing
+* CLI screenshots and test evidence
+* Demonstration videos for diagnostic reporting and continuous traffic monitoring
+* Modular application architecture with dedicated collectors, services, CLI functionality, and tests
+
+The project is designed as an operational troubleshooting utility that can help investigate common network and connectivity issues in development, support, and infrastructure-oriented environments.
 
 ---
 
@@ -462,10 +482,10 @@ Run the complete automated test suite:
 python -m pytest
 ```
 
-Current test result:
+Current verified Linux result:
 
 ```text
-41 passed
+41 passed in 16.83s
 ```
 
 The test suite covers:
@@ -639,11 +659,11 @@ The repository contains screenshots covering network diagnostics, testing, traff
 
 Demonstration videos are included for diagnostic reporting and continuous network traffic monitoring.
 
-### GitHub Release
+### GitHub Publication
 
-**Finalization stage**
+**Published**
 
-The remaining work is to review the final working-tree changes, commit the updated implementation and visual evidence, and push the completed project to GitHub.
+The project is available on GitHub with source code, documentation, automated tests, screenshots, demonstration videos, and an MIT license.
 
 ---
 
