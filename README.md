@@ -2,24 +2,43 @@
 
 [![Python](https://img.shields.io/badge/Python-3.11%2B-blue.svg)](https://www.python.org/)
 [![Tests](https://img.shields.io/badge/Tests-41%20passed-success.svg)](#testing)
-[![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20Linux%20%7C%20macOS-lightgrey.svg)](#cross-platform-verification)
+[![Platform](https://img.shields.io/badge/Verified-Windows%20%7C%20Linux-lightgrey.svg)](#cross-platform-verification)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](#license)
 
-A professional cross-platform Python toolkit for network diagnostics, connectivity testing, service reachability analysis, traffic monitoring, and structured diagnostic reporting.
+A practical cross-platform network diagnostics and monitoring toolkit for investigating connectivity, DNS, TCP services, routing, network traffic, and diagnostic reporting.
 
-The application provides a unified command-line interface for investigating common network problems without relying on external cloud infrastructure. It combines Python networking APIs, operating-system diagnostic commands, traffic statistics, automated testing, and privacy-aware reporting in a modular application architecture.
+The project provides a unified command-line interface for troubleshooting common network problems without relying on external cloud infrastructure. It combines Python networking APIs, operating-system diagnostic commands, traffic statistics, automated testing, and privacy-aware reporting in a modular application architecture.
+
+---
+
+## Why This Project
+
+Network problems often require several different diagnostic tools and commands before the underlying issue becomes clear.
+
+This project brings common checks into one CLI workflow so that an operator can:
+
+* inspect local network interfaces
+* test reachability and latency
+* resolve DNS records
+* test TCP service availability
+* inspect network routes
+* monitor network traffic
+* generate structured diagnostic reports
+* validate results through automated tests
+
+The goal is not to replace dedicated enterprise monitoring platforms. It is to provide a practical, repeatable troubleshooting utility for development, support, and infrastructure-oriented environments.
 
 ---
 
 ## Engineering Evidence
 
-This project demonstrates practical engineering work across network troubleshooting, Python automation, Linux and Windows operations, CLI development, testing, and diagnostic reporting.
+This repository is backed by implementation, automated tests, cross-platform verification, screenshots, generated reports, and demonstration videos.
 
-**Current verified evidence includes:**
+### Current Verified Evidence
 
-* **41 automated tests passing** on Linux with Python 3.14.4
-* Complete test-suite verification on Windows 11 with Python 3.14.7
-* Cross-platform implementation for Windows, Linux, and macOS
+* **41 automated tests passing** on Linux
+* Complete automated test-suite verification on Windows 11
+* Cross-platform implementation with platform-aware behavior for Windows, Linux, and macOS
 * Network interface, connectivity, DNS, TCP, routing, and traffic diagnostics
 * Structured JSON diagnostic report generation
 * Privacy-aware masking of network information for safer sharing
@@ -27,7 +46,87 @@ This project demonstrates practical engineering work across network troubleshoot
 * Demonstration videos for diagnostic reporting and continuous traffic monitoring
 * Modular application architecture with dedicated collectors, services, CLI functionality, and tests
 
-The project is designed as an operational troubleshooting utility that can help investigate common network and connectivity issues in development, support, and infrastructure-oriented environments.
+### Validation Snapshot
+
+| Area              | Evidence                                              |
+| ----------------- | ----------------------------------------------------- |
+| Automated testing | 41 tests passing on Linux                             |
+| Linux             | Full test suite and real network diagnostics verified |
+| Windows           | Full test suite verified on Windows 11                |
+| Networking        | DNS, TCP, ICMP, routing, interfaces, traffic          |
+| Reporting         | Timestamped JSON diagnostic reports                   |
+| CLI               | Commands for major diagnostic workflows               |
+| Visual evidence   | Screenshots covering core workflows                   |
+| Demonstrations    | Diagnostic report and traffic-monitoring videos       |
+| Source control    | Git/GitHub                                            |
+| License           | MIT                                                   |
+
+---
+
+## Quick Start
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/bwachira649/network-diagnostics.git
+cd network-diagnostics
+```
+
+### 2. Create a Virtual Environment
+
+**Linux / macOS:**
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+```
+
+**Windows:**
+
+```cmd
+python -m venv .venv
+.venv\Scripts\activate
+```
+
+### 3. Install Dependencies
+
+```bash
+python -m pip install --upgrade pip
+python -m pip install -r requirements.txt
+python -m pip install -e .
+```
+
+### 4. Run a Diagnostic
+
+Inspect network interfaces:
+
+```bash
+python -m network_diagnostics.main interfaces
+```
+
+Test connectivity:
+
+```bash
+python -m network_diagnostics.main ping example.com
+```
+
+Test a TCP service:
+
+```bash
+python -m network_diagnostics.main port example.com 443
+```
+
+### 5. Run the Complete Test Suite
+
+```bash
+python -m pytest
+```
+
+A verified Linux test run completed with:
+
+```text
+41 passed
+```
 
 ---
 
@@ -179,7 +278,9 @@ Diagnostic reports include a privacy notice indicating that network addresses ha
 
 ## Project Demonstration
 
-The project includes visual evidence captured during development, automated testing, and real-world Linux network diagnostics.
+The repository includes visual evidence captured during development, automated testing, and real Linux network diagnostics.
+
+The evidence is provided to make the implementation independently reviewable rather than relying only on written claims.
 
 ### Complete Network Diagnostic Report
 
@@ -370,6 +471,22 @@ python -m network_diagnostics.main report example.com --port 443 --count 4 --tim
 
 ---
 
+## Technology Stack
+
+| Technology   | Purpose                                  |
+| ------------ | ---------------------------------------- |
+| Python 3.11+ | Application development                  |
+| psutil       | Network interface and traffic statistics |
+| socket       | DNS resolution and TCP networking        |
+| subprocess   | Platform-specific network diagnostics    |
+| argparse     | Command-line interface                   |
+| JSON         | Structured diagnostic reports            |
+| pytest       | Automated testing                        |
+| Git          | Version control                          |
+| GitHub       | Source control and project delivery      |
+
+---
+
 ## Project Structure
 
 ```text
@@ -418,22 +535,6 @@ Generated diagnostic reports are intentionally excluded from version control thr
 
 ---
 
-## Technology Stack
-
-| Technology   | Purpose                                  |
-| ------------ | ---------------------------------------- |
-| Python 3.11+ | Application development                  |
-| psutil       | Network interface and traffic statistics |
-| socket       | DNS resolution and TCP networking        |
-| subprocess   | Platform-specific network diagnostics    |
-| argparse     | Command-line interface                   |
-| JSON         | Structured diagnostic reports            |
-| pytest       | Automated testing                        |
-| Git          | Version control                          |
-| GitHub       | Source control and project delivery      |
-
----
-
 ## Installation
 
 ### Windows
@@ -472,6 +573,8 @@ python -m pip install -r requirements.txt
 python -m pip install -e .
 ```
 
+macOS support depends on the availability and behavior of the required system networking commands. Windows and Linux have been directly verified for this project.
+
 ---
 
 ## Testing
@@ -482,10 +585,10 @@ Run the complete automated test suite:
 python -m pytest
 ```
 
-Current verified Linux result:
+The Linux test suite has been verified with:
 
 ```text
-41 passed in 16.83s
+41 passed
 ```
 
 The test suite covers:
@@ -550,9 +653,9 @@ Linux route diagnostics were additionally validated using `tracepath` because `t
 
 ### macOS
 
-The application architecture uses Python standard-library networking functionality and platform-aware command handling.
+The application uses Python standard-library networking functionality and platform-aware command handling.
 
-macOS support is intended where the required system diagnostic commands are available.
+macOS is supported by the cross-platform design where the required system diagnostic commands are available, but macOS has not been directly verified as part of the documented test evidence.
 
 ---
 
